@@ -1,7 +1,9 @@
-import React , {useState} from 'react';
+import React , { useState, Component } from 'react';
+import { withRouter } from 'react-router-dom';
+
 import './login.css';
 
-const Login = () => {
+const Login = ({history}) => {
 
 
         const [datos, setDatos] = useState({
@@ -11,21 +13,26 @@ const Login = () => {
     
 
         const handleChange = (event) => {
-            console.log(event.target.name);
+            console.log(event.target.value);
             setDatos({
                 ...datos,
                 [event.target.name]: event.target.value
             })
         }
 
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            history.push('/dashboard');
+        }
+
     return (
         <div className="login">
             <div className="login-screen">
                 <div className="app-title">
-                    <h1 id="titleForm">To do List</h1>
                     <h3>Login</h3>
                 </div>
                 <div className="login-form">
+                    <form onSubmit = {handleSubmit.bind(this)}>
                     <div className="control-group">
                         <input 
                             type="text" 
@@ -47,8 +54,16 @@ const Login = () => {
 				        <label className="login-field-icon fui-lock" htmlFor="login-pass"></label>
 				    </div>
 
-                    <a className="btn btn-primary btn-large btn-block" href="#">login</a>
-				    <a className="login-link" href="#">Lost your password?</a>
+                    <button type="submit"
+                    className="btn btn-primary btn-large btn-block">
+                        Submit
+                    </button>
+                    </form>
+                   
+				    <a 
+                        className="login-link" 
+                        href="#">Lost your password?
+                    </a>
                 </div>
 
                 
