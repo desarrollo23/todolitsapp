@@ -14,8 +14,14 @@ class ShoppingCar extends PureComponent {
 
         return(
             <div className="card">
+                
                 <div className="card-body">
                     <h5 className="card-title">{shoppingCarObj.name}</h5>
+                    <img 
+                        src= {`${process.env.PUBLIC_URL}/shopping_cart_black_36dp.png`} 
+                        class="card-img-top" 
+                        alt="..."
+                        style = {{ width: "40%"}}/>
                         <p 
                             className="card-text">
                                 {shoppingCarObj.description}
