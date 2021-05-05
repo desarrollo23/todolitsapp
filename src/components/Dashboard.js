@@ -1,39 +1,32 @@
-import NavBar from './navbar/Navbar.jsx';
-import ShoppingCar from './shoppingCar/ShoppingCar.jsx';
+import React, { useState, useEffect } from 'react';
+import ShoppingCartList from './shoppingCar/ShoppingCartList.jsx';
+
+const axios = require('axios').default;
 
 const Dashboard = () => {
 
+    const baseUrl = "https://localhost:44382/api";
+    const userData = JSON.parse(localStorage.getItem('user')) || {};
+    
+    const [dataEntity, setDataEntity] = useState([]);
+    const {id, token } = userData;
 
-    const shopingCarList = [
-        {
-            "id": 1,
-            "name" : "Compras Abril",
-            "description": "Compras para hacer en el mes de abril",
-            "items": []
-        },
-        {
-            "id": 2,
-            "name" : "Compras en el exito",
-            "description": "Compras que se deben hacer en el exito",
-            "items": []
-        },
-        {
-            "id": 3,
-            "name" : "Compras en el d1",
-            "description": "Compras para hacer el el D1 porque es mas barato",
-            "items": []
-        }
-    ];
+    useEffect(() => {
+        const getShoppingCarsUser = async () => {
+            const result = await axios.get(`${baseUrl}/ShoppingCar/getShoppingCars/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }});
 
-const listItems = shopingCarList.map((el) => {
-       return <ShoppingCar 
-                    shoppingCarObj = {el}
-                    key= {el.id}/>
-});
+                setDataEntity(result.data.entity);
+        };
+
+        getShoppingCarsUser();
+    }, []);
 
     return (
         <>
-            {listItems}
+            <ShoppingCartList data = {dataEntity}/>
         </>
         
     )
