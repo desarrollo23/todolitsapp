@@ -1,17 +1,55 @@
 import React from 'react';
+import apiShoppingCartService from '../../services/ShoppingCartService';
 
 class NewShoppingCart extends React.Component{
 
-    state = {}
+    state = {};
+    
+    constructor(props){
+        super(props);
+
+        this.userData = JSON.parse(localStorage.getItem('userInfo')) || {};
+
+        this.state = {
+            
+        };
+    }
+
+    componentDidMount(){
+        
+    }
 
     handleChange = e => {
-        this.setState({
+
+        this.setState({ 
             [e.target.name]: e.target.value
         });
     }
 
     handleSubmit = e => {
-        console.log(this.state);
+
+        this.createShoppingCart();
+    }
+
+    async createShoppingCart(){
+
+        const request = {
+            name: this.state.name,
+            description: this.state.description,
+            userId: this.userData.id,
+            token: this.userData.token,
+        };
+
+        const response = await apiShoppingCartService.create(request);
+
+        if(response.error.length > 0){
+            alert('Se presento un error');
+            return;
+        }
+
+        alert('Carrito creado con exito');
+
+        this.props.history.push('/dashboard');
     }
 
     render(){
@@ -30,7 +68,7 @@ class NewShoppingCart extends React.Component{
                                         className="form-control back-color-main" 
                                         id="firstName" 
                                         placeholder="name@example.com"
-                                        name = "firstName"
+                                        name = "name"
                                         onChange = {this.handleChange}
                                     />
                                     <label for="floatingInput">Nombre</label>

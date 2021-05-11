@@ -16,6 +16,7 @@ import NewAccount from "../components/newAccount/NewAccount.jsx";
 import NewShoppingCart from "../components/shoppingCar/NewShoppingCart.jsx";
 import EditShoppingCart from "../components/shoppingCar/EditShoppingCart.jsx";
 import Layout from "../components/share/Layout.jsx";
+import NewItemCart from "../components/itemCart/newItemCart.jsx";
 
 
 const AppRouter = () => {
@@ -29,12 +30,13 @@ const AppRouter = () => {
                     <Route path='/' exact component = {Dashboard}/>
                     <Route path='/newAccount' exact component = {NewAccount}/>
                     <Route path='/dashboard' exact component = {Dashboard}/>
-                    <Route path='/shoppingCar/detail' exact component = {ShoppingCarDetail}/>
+                    <Route path='/shoppingCar/detail/:id' exact component = {ShoppingCarDetail}/>
                     <Route path='/shoppingCar' exact component = {ShoppingCar}/>
                     <Route path='/shoppingCart/new' exact component = {NewShoppingCart}/>
-                    <Route path='/shoppingCart/edit' exact component = {EditShoppingCart}/>
+                    <Route path='/shoppingCart/edit/:id' exact component = {EditShoppingCart}/>
                     <Route path='/shoppingCarList' exact component = { ShoppingCartList }/>
                     <Route path='/shoppingCar/detail/itemCart' exact component = {ItemCart}/>
+                    <Route path='/itemCart/new' exact component = {NewItemCart}/>
                     <Route path='/shoppingCar/detail/itemCartList' exact component = { ItemCartList }/>
                     <Route path = "/404">
                         <h1>404 not found</h1>

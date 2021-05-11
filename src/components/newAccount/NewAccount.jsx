@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 const axios = require('axios').default;
 
 class NewAccount extends React.Component{
@@ -48,9 +49,17 @@ class NewAccount extends React.Component{
         return(
             <>
                 <div className="container">
+               
                     <div className="form-container">
+                        
                         <div class="row" style = {{ marginTop: '40px'}}>
+                            
                             <div class="col-md-6 offset-md-3 padding-25px text-align-center box-with-bottom">
+                            <Link to="/login" style={{display:'inline', margin: '0 5px', float:'left'}} >
+                                    <img 
+                                        src = {`${process.env.PUBLIC_URL}/back.png`}
+                                        alt = "Volver atras"/>
+                                </Link>
                                 <h3>Nueva cuenta</h3>
                                 <div className="form-floating mb-3">
                                     <input 

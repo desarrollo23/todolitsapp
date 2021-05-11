@@ -34,9 +34,19 @@ const Navbar = () => {
                   <li><a className="dropdown-item" href="#">Ver perfil</a></li>
                   <li>
 
+                    <Link 
+                      to="/login" 
+                      className="dropdown-item" 
+                      onClick = {() => sessionStorage.clear()}
+                    >
 
-                    <Link to="/login" className="dropdown-item" onClick = {() => localStorage.clear()}>Cerrar Sesión</Link>
-
+                      <img 
+                        src={`${process.env.PUBLIC_URL}/logout.png`} 
+                        alt=""
+                        style={{ width: '15%', marginLeft:'3px'}}/>
+                      <span>Cerrar Sesión</span>
+                      
+                    </Link>
                   </li>
               </ul>
           </li>

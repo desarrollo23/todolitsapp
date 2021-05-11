@@ -1,25 +1,27 @@
-import React from "react";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-class ModalComponent extends React.Component{
+import '../styles/Modal.css';
 
-    render(){
+function Modal(props) {
+  if (!props.isOpen) {
+    return null;
+  }
 
-        return(
-            <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="staticBackdropLabel">Editar carrito</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <h3>Hola</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+  return ReactDOM.createPortal(
+    <div className="Modal">
+      <div className="Modal__container">
+        <button onClick={props.onClose} className="Modal__close-button">
+          X
+        </button>
+
+        <div className="Modal__content">
+            {props.children}
+        </div>
+      </div>
+    </div>,
+    document.getElementById('modal')
+  );
 }
 
-export default ModalComponent;
+export default Modal;

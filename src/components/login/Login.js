@@ -1,11 +1,8 @@
 import React , { useState } from 'react';
 import { Link, Router } from 'react-router-dom';
+import apiLoginService from '../../services/LoginService';
 
-const axios = require('axios').default;
 const Login = (props) => {
-
-        const baseUrl = "https://localhost:44382/api";
-
         const [identification, setIdentification] = useState();
         const [password, setPassword] = useState();
 
@@ -23,34 +20,18 @@ const Login = (props) => {
             }
         }
 
-        const Authenticate = () => {
+        const Authenticate = async() => {
 
-            axios.post(`${baseUrl}/Security/authenticate`, {
-                identification,
-                password
-              })
-              .then(function (response) {
-                  const {data} = response;
-                  
-                if(data.statusCode === 200){
+            const response = await apiLoginService.login(identification, password);
+           
+            if(response.error != undefined){
+                alert('Credenciales no validas');
+                return;
+            }
 
-                    
-                    localStorage.setItem('user', JSON.stringify(data));
+            sessionStorage.setItem('userInfo', JSON.stringify(response.result));
 
-                    props.history.push({
-                        pathname: '/dashboard',
-                        state: { detail: data }
-                    });
-                }
-                    
-
-              })
-              .catch(function (error) {
-                
-                const alertDv = document.querySelector("#alert");
-                alertDv.style.display = "block";
-
-              });
+            props.history.push('/dashboard');
         }
 
         const ValidateModel = () => {

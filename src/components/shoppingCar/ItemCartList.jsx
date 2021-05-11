@@ -1,21 +1,40 @@
 import ItemCart from "./ItemCart";
 import React from 'react';
+import Loading from "../share/Loading";
+import NewItemCart from "../itemCart/newItemCart";
 
 
-const ItemCartList = (props) => {
-    const { items } = props;
+class ItemCartList extends React.Component {
+   
+    state = {}
+    constructor(props){
+        super(props);
+        this.cart = props.cart;
 
-    const itemCartRender = items.map(el => {
-        
-        return <ItemCart 
-                    item = {el}
-                    key = {el.id}/> 
-            
-    });
+        this.state = {
+            loading: true,
+            cart: this.cart
+        };
 
+        console.log(this.state);
+    }
+
+
+    componentDidMount(){
+        // this.setState({
+        //     cart: this.cart
+        // });
+
+        // this.setState({loading:false});
+    }
+
+    
+
+render(){
     return(
         <>
-            <table className="table">
+            
+            <table className="table" >
                 <thead>
                     <tr>
                         <th scope="col">Nombre</th>
@@ -25,18 +44,22 @@ const ItemCartList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    { itemCartRender }
+                    {this.state.cart.items.map(item => {
+                        return <ItemCart 
+                                    item = {item}
+                                    key = {item.id} />
+                    })}
+                    <NewItemCart 
+                        active={false}
+                        idCart = {this.state.cart.id}/>
                 </tbody>
             </table>
-            <div className="text-align-center">
-                <a href="" style = {{textDecoration: 'none'}}>
-                    <img src= { `${process.env.PUBLIC_URL}/add.png`} alt=""/>
-                    <span className="text-muted">Agregar</span>
-                </a>
-            </div>
+        
        
         </>
     )
+}
+    
 }
 
 export default ItemCartList;

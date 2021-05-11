@@ -1,4 +1,8 @@
 .box-cart {
-    margin: 4rem 2.5rem;
+    margin: 1rem 2.5rem;
     padding: 20px;
+}
+
+.box-cart:hover {
+    border: 1px solid #17252A;
 }

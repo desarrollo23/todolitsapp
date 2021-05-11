@@ -1,97 +1,168 @@
-
-import ValidateLogin from "../security/ValidateLogin";
 import EditShoppingCart from "./EditShoppingCart";
 import ItemCartList  from "./ItemCartList";
-import ModalComponent from '../modals/Modal';
+import apiShoppingCartService from '../../services/ShoppingCartService';
+import React from 'react';
+import { Link } from "react-router-dom";
+import Loading from "../share/Loading";
+import Modal from '../modals/Modal';
+
+import '../styles/Modal.css';
 import './ShoppingCartDetail.css';
-import { useState } from "react";
+import DeleteModal from "../modals/DeleteModal";
 
-const axios = require('axios').default;
+class ShoppingCarDetail extends React.Component {
 
-const ShoppingCarDetail = (props) => {
 
-    const { state } = props.location;
-    const cartObj = state.detail;
-    const baseUrl = "https://localhost:44382/api";
+    constructor(props){
+        super(props);
 
-    const [html, setHtml] = useState();
+        this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
-    let editCartHtml = '';
+        this.state = {
+            modalIsOpen: false,
+            deleteModalIsOpen: false,
+            cart: {},
+            loading: true,
+            showModal: false
+        } ;
+    }
+    
+    componentDidMount(){
+        const id = this.props.match.params.id;
+        this.getCartById(id);
+        
+    }
 
-    const deteleCart = (e) => {
+    async getCartById(id){
+        this.setState({loading: true});
+
+        const response = await apiShoppingCartService.getById(id, this.userInfo.token);
+
+        this.setState({cart: response.entity});
+        this.setState({loading: false});
+    }
+
+    handleClickEdit(){
+
+        this.handleOpenModal();
+    }
+
+    handleCloseModal(){
+        this.state.modal.style.display = "none";
+    }
+
+    handleOnCloseModal(){
+        this.setState({ modalIsOpen: false });
+    }
+
+    handleCloseDeleteModal(){
+        this.setState({ deleteModalIsOpen: false });
+    }
+
+    handleOpenDeleteModal(){
+        this.setState({ deleteModalIsOpen: true });
+    }
+
+    onDelete(){
+        console.log('lo elimino');
+    }
+
+    onCancel(){
+        console.log('lo cancelo');
+    }
+
+    handleOpenModal(){
+        this.setState({ modalIsOpen: true });
+    }
+
+    onEditFormSubmit(e){
         e.preventDefault();
-        const answer = prompt('¿Esta seguro de eliminar el carrito?');
-
-        if(answer == 'si'){
-            deleteCartService();
-        }
+        this.handleCloseModal();
     }
 
-    const deleteCartService = () => {
+    render(){
+        return(
+            <>
+                {this.state.loading === true && <Loading />}
 
-        axios({
-            method: 'delete',
-            url: `${baseUrl}/ShoppingCar/deleteShoppingCar/${cartObj.id}`
-        }).then(console.log)
-        .catch(console.log);
-    }
+                {this.state.loading === false && 
+                <div>
+                    <Modal 
+                        isOpen ={this.state.modalIsOpen}
+                        onClose = {this.handleOnCloseModal.bind(this)} 
+                        >
+                        <EditShoppingCart 
+                                        cart = {this.state.cart}
+                                        onSubmit = {this.onEditFormSubmit.bind(this)}/>
+                    </Modal>
 
-    const editCart = (e) => {
-        e.preventDefault();
+                    <DeleteModal
+                        isOpen = {this.state.deleteModalIsOpen}
+                        onClose = {this.handleCloseDeleteModal.bind(this)}
+                        onDelete = {this.onDelete.bind(this)}
+                        onCancel = {this.onCancel.bind(this)}>
 
-        editCartHtml = <EditShoppingCart cart= {cartObj}/>; 
-        setHtml(editCartHtml);
-
-    }
-
-    return(
-        <>
-            <div className="container" style={{ marginTop: "20px"}}>
-                <div className="row">
-                    <div className="col-12">
-                        <h4 className="font-custom-bold">{cartObj.name}</h4>
-                        <hr/>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-4">
-                        <div className="card box-with-bottom text-align-center inline-block">
-                            <img 
-                                src = {`${process.env.PUBLIC_URL}/carrito_compras.png`}
-                                className = "card-img-top" style = {{ width: "45%" }}/>
-                            <div className="card-body">
-                                <p className="card-text">
-                                    {cartObj.description}
-                                </p>
-                                <a 
-                                    href="#" 
-                                    className="btn btn-primary-custom"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop"
-                                    onClick = {editCart}>Editar</a>
-                                <a 
-                                    href="#" 
-                                    className="btn btn-delete"
-                                    onClick= {deteleCart}
-                                    >Eliminar</a>
+                    </DeleteModal>
+                        
+                        <div className="container" style={{ marginTop: "20px"}}>
+                        <div className="row">
+                            <div className="col-12">
+                            <Link to="/dashboard" style={{display:'inline', margin: '0 5px'}} >
+                                    <img 
+                                        src = {`${process.env.PUBLIC_URL}/back.png`}
+                                        alt = "Volver atras"/>
+                                </Link>
+                                <h4 className="font-custom-bold" style={{display:'inline'}}>{this.state.cart.name}</h4>
+                                <hr/>
+                                
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-4">
+                                
+                                <div className="card box-with-bottom text-align-center" style={{alignItems:'center'}}>
+                                
+                                    <img 
+                                        src = {`${process.env.PUBLIC_URL}/carrito_compras.png`}
+                                        className = "card-img-top" style = {{ width: "45%" }}/>
+                                    <div className="card-body">
+                                        <p className="card-text">
+                                            {this.state.cart.description}
+                                        </p>
+                                        <hr />
+                                        <button 
+                                            id="myBtn" 
+                                            className="btn btn-primary-custom"
+                                            onClick={this.handleClickEdit.bind(this)}>Editar</button>
+                                        <a 
+                                            href="#" 
+                                            className="btn btn-delete"
+                                            onClick = {this.handleOpenDeleteModal.bind(this)}
+                                            >Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div className="col-8 box-with-bottom">
+                                <div className = "itemsCart">
+                                    <h5>Productos</h5>
+                                    <div>
+                                        <ItemCartList cart = { this.state.cart }/> 
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div className="col-8 box-with-bottom">
-                        <div className = "itemsCart">
-                            <h5>Productos</h5>
-                            <div>
-                                 <ItemCartList items = { cartObj.items }/> 
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </div>
-
-            <ModalComponent html = {html}/>
-        </>
-    )
+                
+               
+                
+                }
+                
+            </>
+        )
+    }
+    
 }
 
 export default ShoppingCarDetail;

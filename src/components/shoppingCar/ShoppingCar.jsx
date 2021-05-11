@@ -1,5 +1,5 @@
 import React, { PureComponent, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import '../styles/ShoppingCart.css';
 
 class ShoppingCar extends PureComponent {
@@ -36,13 +36,9 @@ class ShoppingCar extends PureComponent {
 
         return(
             <>
-            
-
-              
-
-                    <div 
-                        className="card text-align-center back-color-main box-cart inline-block" 
-                        style = {{ width: '18rem'}}>
+                <div 
+                    className="card text-align-center back-color-main box-cart inline-block" 
+                    style = {{ width: '18rem'}}>
                         
                             <img 
                                 src= {image}
@@ -53,12 +49,11 @@ class ShoppingCar extends PureComponent {
                             <h5 className="card-title">{newShoppingCart.name }</h5>
                             <p class="card-text"></p>
                             { !isNewCart ? 
-                                    <a 
-                                        
-                                    className="btn btn-primary-custom"
-                                    onClick = 
-                                        {(event) => this.goToDetail(newShoppingCart)}>
-                                            Entrar al carrito</a>
+                                    <Link 
+                                        to={`shoppingCar/detail/${shoppingCarObj.id}`}
+                                        className="btn btn-primary-custom">
+                                        Detalle
+                                    </Link>
                                     : 
                                     <a 
                                     

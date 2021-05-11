@@ -54,3 +54,28 @@ body {
     background-color: #F76C6C;
     color: white;
 }
+
+.loading {
+    background-color: #DEF2F1;
+    width: 20%;
+    margin: 100px 530px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+}
+
+.link-primary {
+    text-decoration: none;
+    color: #17252A;
+    font-weight: bold;
+}
+
+.link-primary:hover {
+    color: #17252A;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+}
