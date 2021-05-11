@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import apiShoppingCartService from '../../services/ShoppingCartService';
 
 class NewShoppingCart extends React.Component{
@@ -61,6 +62,11 @@ class NewShoppingCart extends React.Component{
                             <div 
                                 class="col-md-6 offset-md-3 box-with-bottom text-align-center"
                                 style = {{marginTop: '70px'}}>
+                                    <Link to="/dashboard" style={{float: 'left'}} >
+                                    <img 
+                                        src = {`${process.env.PUBLIC_URL}/back.png`}
+                                        alt = "Volver atras"/>
+                                </Link>
                             <h3>Nuevo carrito</h3>
                                 <div className="form-floating mb-3">
                                     <input 

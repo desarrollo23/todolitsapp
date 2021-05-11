@@ -1,17 +1,16 @@
-import EditShoppingCart from "./EditShoppingCart";
-import ItemCartList  from "./ItemCartList";
-import apiShoppingCartService from '../../services/ShoppingCartService';
 import React from 'react';
 import { Link } from "react-router-dom";
-import Loading from "../share/Loading";
-import Modal from '../modals/Modal';
 
-import '../styles/Modal.css';
-import './ShoppingCartDetail.css';
-import DeleteModal from "../modals/DeleteModal";
+import EditShoppingCart from "../components/shoppingCar/EditShoppingCart";
+import ItemCartList  from "../components/shoppingCar/ItemCartList";
+import apiShoppingCartService from '../services/ShoppingCartService';
+import Loading from "../components/share/Loading";
+import Modal from '../components/modals/Modal';
+import DeleteModal from "../components/modals/DeleteModal";
+
+import '../components/styles/Modal.css';
 
 class ShoppingCarDetail extends React.Component {
-
 
     constructor(props){
         super(props);
@@ -30,7 +29,6 @@ class ShoppingCarDetail extends React.Component {
     componentDidMount(){
         const id = this.props.match.params.id;
         this.getCartById(id);
-        
     }
 
     async getCartById(id){
@@ -81,11 +79,13 @@ class ShoppingCarDetail extends React.Component {
     }
 
     render(){
+
+        if(this.state.loading === true){
+            return <Loading />
+        }
+
         return(
             <>
-                {this.state.loading === true && <Loading />}
-
-                {this.state.loading === false && 
                 <div>
                     <Modal 
                         isOpen ={this.state.modalIsOpen}
@@ -101,20 +101,18 @@ class ShoppingCarDetail extends React.Component {
                         onClose = {this.handleCloseDeleteModal.bind(this)}
                         onDelete = {this.onDelete.bind(this)}
                         onCancel = {this.onCancel.bind(this)}>
-
                     </DeleteModal>
                         
                         <div className="container" style={{ marginTop: "20px"}}>
                         <div className="row">
                             <div className="col-12">
-                            <Link to="/dashboard" style={{display:'inline', margin: '0 5px'}} >
+                                <Link to="/dashboard" style={{display:'inline', margin: '0 5px'}} >
                                     <img 
                                         src = {`${process.env.PUBLIC_URL}/back.png`}
                                         alt = "Volver atras"/>
                                 </Link>
                                 <h4 className="font-custom-bold" style={{display:'inline'}}>{this.state.cart.name}</h4>
                                 <hr/>
-                                
                             </div>
                         </div>
                         <div className="row">
@@ -143,21 +141,10 @@ class ShoppingCarDetail extends React.Component {
                                 </div>
                             </div>
         
-                            <div className="col-8 box-with-bottom">
-                                <div className = "itemsCart">
-                                    <h5>Productos</h5>
-                                    <div>
-                                        <ItemCartList cart = { this.state.cart }/> 
-                                    </div>
-                                </div>
-                            </div>
+                            <ItemCartList cart = { this.state.cart }/> 
                         </div>
                     </div>
                 </div>
-                
-               
-                
-                }
                 
             </>
         )

@@ -1,26 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import ShoppingCartList from './shoppingCar/ShoppingCartList.jsx';
-import apiShoppingCartService from '../services/ShoppingCartService';
+import Carts from '../pages/Carts';
 
-class Dashboard extends React.Component{
+function Dashboard(){
 
-    state = {}
-
-    constructor(props){  
-        super(props)
-    }
-
-    componentDidMount(){
-        
-    }
-
-    render(){
-        return (
-            <>
-                <ShoppingCartList/>
-            </>
-        )
-    }
+        return <Carts/>
+    
 }
 
 export default Dashboard;

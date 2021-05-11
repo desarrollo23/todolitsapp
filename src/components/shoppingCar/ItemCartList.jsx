@@ -1,64 +1,61 @@
 import ItemCart from "./ItemCart";
-import React from 'react';
-import Loading from "../share/Loading";
+import React, { useMemo, useState } from 'react';
 import NewItemCart from "../itemCart/newItemCart";
+import Search from "../search/Search";
 
 
-class ItemCartList extends React.Component {
+function ItemCartList(props) {
    
-    state = {}
-    constructor(props){
-        super(props);
-        this.cart = props.cart;
+    const { cart } = props;
+    const [query, setQuery] = useState('');
+    const [ filteredItems, setFilteredItems ] = useState(cart.items);
 
-        this.state = {
-            loading: true,
-            cart: this.cart
-        };
+    useMemo(() => {
+        const result = cart.items.filter(item => {
+            return item.name.toLowerCase()
+                            .includes(query.toLocaleLowerCase())
+        });
 
-        console.log(this.state);
-    }
+        setFilteredItems(result);
+    }, [cart.items, query]);
 
 
-    componentDidMount(){
-        // this.setState({
-        //     cart: this.cart
-        // });
-
-        // this.setState({loading:false});
-    }
-
-    
-
-render(){
     return(
         <>
-            
-            <table className="table" >
-                <thead>
-                    <tr>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">Completado</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.cart.items.map(item => {
-                        return <ItemCart 
-                                    item = {item}
-                                    key = {item.id} />
-                    })}
-                    <NewItemCart 
-                        active={false}
-                        idCart = {this.state.cart.id}/>
-                </tbody>
-            </table>
+            <div className="col-8 box-with-bottom">
+                <div className = "itemsCart">
+                    <Search 
+                        value = {query}
+                        onChange = { e => setQuery(e.target.value)}/>
+                    <div>
+                        <table className="table" >
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Completado</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredItems.map(item => {
+                                    return <ItemCart 
+                                                item = {item}
+                                                key = {item.id} />
+                                })}
+                                <NewItemCart 
+                                    active={false}
+                                    idCart = {cart.id}/>
+                            </tbody>
+                        </table>                      
+                    </div>
+                </div>
+            </div>
+           
         
        
         </>
     )
-}
     
 }
 

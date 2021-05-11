@@ -7,7 +7,7 @@ import {
 
 import Dashboard from "../components/Dashboard.js";
 import Login from '../components/login/Login.js';
-import ShoppingCarDetail from '../components/shoppingCar/ShoppingCarDetail.jsx';
+import ShoppingCarDetail from '../pages/ShoppingCarDetail';
 import ShoppingCar from '../components/shoppingCar/ShoppingCar.jsx';
 import ItemCart from "../components/shoppingCar/ItemCart.jsx";
 import ItemCartList from "../components/shoppingCar/ItemCartList.jsx";

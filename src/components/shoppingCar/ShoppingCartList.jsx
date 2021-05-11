@@ -1,65 +1,39 @@
-import React from 'react';
+import { useState, useMemo } from "react";
+import Search from "../search/Search";
 import ShoppingCar from "./ShoppingCar";
-import apiShoppingCartService from '../../services/ShoppingCartService';
-import Loading from '../share/Loading';
 
-class ShoppingCartList extends React.Component{
+function ShoppingCartList(props){
 
-    state = {};
+    const {carts} = props;
+    const [query, setQuery] = useState('');
+    const [ filteredCarts, setFilteredCarts ] = useState(carts);
 
-    constructor(props){
-        super(props);
+    useMemo(() => {
+        const result = carts.filter(cart => {
+            return cart.name.toLowerCase()
+                            .includes(query.toLocaleLowerCase())
+        });
 
-        this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        setFilteredCarts(result);
+    }, [carts, query]);
 
-        this.state = {
-            loading: true,
-            data:[]
-        };
-
-    }
     
-    componentDidMount(){
-        this.getShoppingCarts();
-    }
+    return (
 
-    async getShoppingCarts(){
+        
+        <>
+            <Search 
+                value = {query}
+                onChange = { e => setQuery(e.target.value) }/>
 
-        this.setState({loading: true});
-        const response = await apiShoppingCartService
-            .getByUser(this.userInfo.id, this.userInfo.token);
-
-        if(response.entity){
-            this.setState({
-                data: response.entity
-            });
-        }
-
-        this.setState({loading: false});
-
-    }
-    render(){
-        return(
-            <>
-                {this.state.loading === true && <Loading />}
-
-                {this.state.loading === false && 
-                     <div className="container" style={{ marginTop:'1rem'}}>
-                     <ShoppingCar />
-                     
-                     {this.state.data.map(item => {
- 
-                         return (
-                             <ShoppingCar shoppingCarObj = {item} key={item.id}/>
-                         );
-                     })}
-         
-                 </div>
-                }
-               
-            </>
-        )
-    }
+            <div className="container" style={{ marginTop:'1rem'}}>
+                <ShoppingCar />
+                {filteredCarts.map(cart => {
+                    return <ShoppingCar shoppingCarObj = {cart}/>
+                })}
+            </div>
+        </>
+    )
 }
 
 export default ShoppingCartList;
