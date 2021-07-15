@@ -1,21 +1,11 @@
-import { useState, useMemo } from "react";
 import Search from "../search/Search";
+import useSearch from "../share/hooks/UseSearch";
 import ShoppingCar from "./ShoppingCar";
 
 function ShoppingCartList(props){
 
     const {carts} = props;
-    const [query, setQuery] = useState('');
-    const [ filteredCarts, setFilteredCarts ] = useState(carts);
-
-    useMemo(() => {
-        const result = carts.filter(cart => {
-            return cart.name.toLowerCase()
-                            .includes(query.toLocaleLowerCase())
-        });
-
-        setFilteredCarts(result);
-    }, [carts, query]);
+    const { query, setQuery, filteredList } = useSearch(carts);
 
     
     return (
@@ -28,7 +18,7 @@ function ShoppingCartList(props){
 
             <div className="container" style={{ marginTop:'1rem'}}>
                 <ShoppingCar />
-                {filteredCarts.map(cart => {
+                {filteredList.map(cart => {
                     return <ShoppingCar shoppingCarObj = {cart}/>
                 })}
             </div>

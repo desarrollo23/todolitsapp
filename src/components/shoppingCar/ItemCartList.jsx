@@ -2,22 +2,14 @@ import ItemCart from "./ItemCart";
 import React, { useMemo, useState } from 'react';
 import NewItemCart from "../itemCart/newItemCart";
 import Search from "../search/Search";
+import useSearch from '../share/hooks/UseSearch'
 
 
 function ItemCartList(props) {
    
     const { cart } = props;
-    const [query, setQuery] = useState('');
-    const [ filteredItems, setFilteredItems ] = useState(cart.items);
 
-    useMemo(() => {
-        const result = cart.items.filter(item => {
-            return item.name.toLowerCase()
-                            .includes(query.toLocaleLowerCase())
-        });
-
-        setFilteredItems(result);
-    }, [cart.items, query]);
+    const { query, setQuery, filteredList } = useSearch(cart.items);
 
 
     return(
@@ -38,7 +30,7 @@ function ItemCartList(props) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredItems.map(item => {
+                                {filteredList.map(item => {
                                     return <ItemCart 
                                                 item = {item}
                                                 key = {item.id} />
